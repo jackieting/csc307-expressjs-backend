@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 5001;  // port5000 not working
+const port = 5001;  // port 5000 not working
 const users = { 
     users_list :
     [
@@ -56,12 +56,17 @@ const findUserByName = (name) => {
 
 app.get('/users/:id', (req, res) => {
     const id = req.params['id']; //or req.params.id
-    let result = findUserById(id);
-    if (result === undefined || result.length == 0)
-        res.status(404).send('Resource not found.');
-    else {
-        result = {users_list: result};
-        res.send(result);
+
+    if (id == 'all-users' && users['users_list'].length != 0){ // step 7 - get all users
+        res.send(users);
+    } else {
+        let result = findUserById(id);
+        if (result === undefined || result.length == 0)
+            res.status(404).send('Resource not found.');
+        else {
+            result = {users_list: result};
+            res.send(result);
+        }
     }
 });
 
@@ -79,6 +84,31 @@ app.post('/users', (req, res) => {
 function addUser(user){
     users['users_list'].push(user);
 }
+
+// step 7 - DELETE
+
+app.delete('/users/delete/:id', (req, res) => {
+    const id = req.params['id'];
+    let result = findUserById(id);
+
+    if (result === undefined || result.length == 0)
+        res.status(404).send('Resource not found.');
+    else {
+        deleteUser(id);
+        res.send(users);
+    }
+});
+
+
+function deleteUser(id) {
+    for (var i=0; i<users['users_list'].length; i++){
+        if (users['users_list'][i]['id'] == id){
+            users['users_list'].splice(i, 1);
+            break;
+        }   
+    }    // we know the user exists so we don't need to handle that
+}
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
