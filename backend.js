@@ -79,12 +79,31 @@ function findUserById(id) {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.status(200).end();
+    addUser(userToAdd); 
+    // should it still be successful if the userToAdd is empty or missing a name or occupation??
+    res.status(201).end();
 });
 
 function addUser(user){
+    // make random ID
+    user['id'] = idGenerator();
     users['users_list'].push(user);
+}
+
+function idGenerator(){
+    var random_ID = "";
+    var random_char = '';
+    for (var i=0; i<6; i++){
+        if (i < 3){ // first three chars in ID are letters (a-z)
+            random_char = Math.floor(Math.random() * (26) + 97);
+            random_ID += String.fromCharCode(random_char); 
+        } else {    // last three chars n ID are digits (0-9)
+            random_char = Math.floor(Math.random() * (10) + 48);
+            random_ID += String.fromCharCode(random_char); 
+        }
+    }
+    
+    return random_ID;    // join arr of random chars to get ID
 }
 
 // step 7 - DELETE
