@@ -81,12 +81,12 @@ app.post('/users', (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd); 
     // should it still be successful if the userToAdd is empty or missing a name or occupation??
-    res.status(201).end();
+    res.status(201).send(userToAdd).end();
 });
 
 function addUser(user){
     // make random ID
-    user['id'] = idGenerator();
+    user.id = idGenerator();
     users['users_list'].push(user);
 }
 
@@ -102,7 +102,6 @@ function idGenerator(){
             random_ID += String.fromCharCode(random_char); 
         }
     }
-    
     return random_ID;    // join arr of random chars to get ID
 }
 
