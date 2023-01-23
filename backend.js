@@ -105,9 +105,9 @@ function idGenerator(){
     return random_ID;    // join arr of random chars to get ID
 }
 
-// step 7 - DELETE
+// DELETE
 
-app.delete('/users/delete/:id', (req, res) => {
+app.delete('/users/:id', (req, res) => {
     const id = req.params['id'];
     let result = findUserById(id);
 
@@ -115,7 +115,8 @@ app.delete('/users/delete/:id', (req, res) => {
         res.status(404).send('Resource not found.');
     else {
         deleteUser(id);
-        res.send(users);
+        res.status(204).end();
+        //res.send(users);
     }
 });
 
